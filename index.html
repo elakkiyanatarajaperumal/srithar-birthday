@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CORE::SRITHAR_BDAY_SYSTEM</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js for 3D Graphics -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    code, .font-mono { font-family: 'Fira Code', monospace; }
+    body { background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+    
+    #canvas3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    /* Animated Cyberpunk Neon Border Container */
+    .cyber-gradient-wrapper {
+      position: relative;
+      border-radius: 1.5rem;
+      background: linear-gradient(135deg, rgba(59,130,246,0.6), rgba(168,85,247,0.6), rgba(16,185,129,0.6));
+      padding: 2px;
+      box-shadow: 0 0 60px rgba(59, 130, 246, 0.35), 0 0 120px rgba(168, 85, 247, 0.25);
+      animation: borderGlow 6s ease infinite alternate;
+    }
+
+    @keyframes borderGlow {
+      0% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)); }
+      50% { filter: drop-shadow(0 0 35px rgba(168, 85, 247, 0.7)); }
+      100% { filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.6)); }
+    }
+
+    /* Cyber Glass Panel */
+    .cyber-glass {
+      background: rgba(8, 14, 28, 0.85);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 1.4rem;
+    }
+
+    /* Ultra-Rich Glass Modal */
+    .rich-modal-glass {
+      background: linear-gradient(135deg, rgba(11, 19, 43, 0.65), rgba(15, 23, 42, 0.75));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 0 80px rgba(59, 130, 246, 0.4), inset 0 0 30px rgba(168, 85, 247, 0.2);
+    }
+
+    /* CRT Scanlines Visual Effect */
+    .scanlines {
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0, 0, 0, 0.35) 50%,
+        rgba(0, 0, 0, 0.35)
+      );
+      background-size: 100% 4px;
+    }
+
+    .neon-glow-text {
+      text-shadow: 0 0 18px rgba(59, 130, 246, 0.9), 0 0 35px rgba(168, 85, 247, 0.7);
+    }
+
+    .neon-emerald-glow {
+      text-shadow: 0 0 14px rgba(16, 185, 129, 0.9);
+    }
+
+    .glass-card-quote {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(8px);
+    }
+
+    .media-glass-card {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .media-glass-card:hover {
+      border-color: rgba(236, 72, 153, 0.9);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 35px rgba(236, 72, 153, 0.35);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #a855f7); border-radius: 4px; }
+  </style>
+</head>
+<body class="relative min-h-screen selection:bg-blue-500 selection:text-white">
+
+  <!-- 3D DYNAMIC BACKGROUND CANVAS -->
+  <canvas id="canvas3d"></canvas>
+
+  <!-- OVERLAY UI LAYER -->
+  <div class="relative z-10 flex flex-col justify-between min-h-screen p-4 md:p-8 pointer-events-none">
+    
+    <!-- TOP BAR -->
+    <header class="flex items-center justify-between w-full max-w-5xl mx-auto cyber-gradient-wrapper pointer-events-auto">
+      <div class="cyber-glass w-full px-5 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          </span>
+          <span class="text-xs md:text-sm font-bold tracking-widest text-emerald-400 neon-emerald-glow font-mono">
+            CORE://SRITHAR_CORE_SYSTEMS
+          </span>
+        </div>
+        <div class="text-xs text-slate-400 font-mono">
+          AUG 15 • <span id="clock" class="text-blue-400 font-bold">00:00:00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="w-full max-w-4xl mx-auto my-auto py-6 pointer-events-auto">
+      
+      <!-- SCENE 1: TERMINAL INTERFACE -->
+      <div id="scene1" class="cyber-gradient-wrapper transition-all duration-700">
+        <div class="cyber-glass overflow-hidden">
+          
+          <!-- Mac IDE Window Header -->
+          <div class="bg-slate-950/90 px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between font-mono">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-3.5 h-3.5 rounded-full bg-red-500/90 shadow-lg shadow-red-500/50"></div>
+              <div class="w-3.5 h-3.5 rounded-full bg-yellow-500/90 shadow-lg shadow-yellow-500/50"></div>
+              <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/90 shadow-lg shadow-emerald-500/50"></div>
+              <span class="text-xs text-slate-400 font-semibold ml-3">bash — srithar@dev-core: ~</span>
+            </div>
+            <span class="text-[11px] font-bold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full border border-purple-500/40">
+              USER: SRITHAR (LEGEND DEV)
+            </span>
+          </div>
+
+          <!-- Terminal Content Body -->
+          <div class="p-6 md:p-8 space-y-6 relative scanlines font-mono">
+            
+            <!-- Diagnostics Log -->
+            <div class="space-y-2 text-xs md:text-sm text-slate-300">
+              <p><span class="text-blue-400 font-bold">sys.init()</span> -&gt; Verifying developer metrics...</p>
+              <p><span class="text-emerald-400 font-bold">✓ PASS</span> -&gt; Architectural Mindset detected.</p>
+              <p><span class="text-emerald-400 font-bold">✓ PASS</span> -&gt; Full-Stack Capabilities verified.</p>
+              <p class="text-amber-400 font-bold animate-pulse pt-1">&gt; ACTION REQUIRED: Press [ENTER] to execute birthday deployment.</p>
+            </div>
+
+            <!-- Terminal Input Screen -->
+            <div class="bg-slate-950/90 p-5 rounded-xl border border-slate-800/90 shadow-2xl space-y-4">
+              <div id="terminalOutput" class="space-y-2 text-slate-300 text-sm max-h-48 overflow-y-auto pr-2">
+                <div class="text-slate-200">
+                  Press <span class="text-emerald-400 font-bold">'ENTER'</span> to bypass protocol & launch celebration! 🚀
+                </div>
+              </div>
+
+              <!-- Input Prompt Line -->
+              <div class="flex items-center space-x-2 pt-3 border-t border-slate-900 text-emerald-400 font-bold">
+                <span class="text-xs md:text-sm">srithar@dev-core:~$</span>
+                <input type="text" id="cmdInput" class="bg-transparent border-none outline-none text-white flex-1 font-mono text-sm focus:ring-0 placeholder-slate-600" autofocus placeholder="press Enter to deploy..." />
+              </div>
+            </div>
+
+            <!-- One-Click Launch Button -->
+            <div class="pt-2 flex justify-center">
+              <button onclick="unlockGrandScene()" class="w-full md:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-blue-600 to-purple-600 hover:from-emerald-400 hover:to-purple-500 text-white font-bold rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2">
+                <span>🚀 Press ENTER or Click Here to Launch</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 2: GRAND CELEBRATION CARD -->
+      <div id="scene2" class="hidden cyber-gradient-wrapper transition-all duration-1000">
+        <div class="cyber-glass p-6 md:p-10 space-y-8">
+          
+          <!-- Banner Header -->
+          <div class="text-center space-y-3">
+            <span class="px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-xs text-emerald-400 font-bold tracking-wider uppercase inline-block shadow-lg font-mono">
+              ✓ SYSTEM DEPLOYMENT SUCCESSFUL
+            </span>
+            <h1 class="text-4xl md:text-7xl font-extrabold text-white neon-glow-text tracking-tight">
+              HAPPY BIRTHDAY,<br/>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">SRITHAR!</span> 🎉
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base font-semibold">
+              Master of Clean Code • Architect of Grand Solutions
+            </p>
+          </div>
+
+          <!-- FUNNY NON-CODING STATS GRID -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-blue-500/30 text-center shadow-lg">
+              <div class="text-3xl font-bold text-blue-400 font-mono">∞</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Memes Shared</div>
+            </div>
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-emerald-500/30 text-center shadow-lg">
+              <div class="text-3xl font-bold text-emerald-400 font-mono">100%</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Procrastination Accuracy</div>
+            </div>
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-purple-500/30 text-center shadow-lg">
+              <div class="text-3xl font-bold text-purple-400 font-mono">🍵 999+</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Tea Cups Consumed</div>
+            </div>
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-amber-500/30 text-center shadow-lg">
+              <div class="text-3xl font-bold text-amber-400 font-mono">GOD TIER</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Dev Skill</div>
+            </div>
+          </div>
+
+          <!-- ACTIONS AREA -->
+          <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-2">
+            <button onclick="openWishModal()" class="w-full md:w-auto px-7 py-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 border border-emerald-400/30">
+              <span>✉️ OPEN SECRET MESSAGE PROTOCOL</span>
+            </button>
+            <button onclick="launchSupernova()" class="w-full md:w-auto px-7 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 border border-purple-400/30">
+              <span>💥 TRIGGER 3D SUPERNOVA</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-5xl mx-auto flex items-center justify-between text-xs text-slate-500 pt-4 pointer-events-auto font-mono">
+      <div>Crafted specially for Srithar</div>
+      <div>Hosted on GitHub Pages</div>
+    </footer>
+  </div>
+
+  <!-- POPUP MODAL FOR SECRET MESSAGE & MEDIA ALBUM -->
+  <div id="wishModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-6 bg-slate-950/30 backdrop-blur-sm transition-opacity duration-500 overflow-y-auto">
+    
+    <div class="cyber-gradient-wrapper max-w-4xl w-full my-auto transform scale-95 transition-all duration-300 relative overflow-hidden" id="modalContent">
+      
+      <!-- CONTINUOUS FLOATING AMBIENT CANVAS INSIDE MODAL -->
+      <canvas id="modalParticleCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+      <div class="rich-modal-glass rounded-2xl p-6 md:p-10 space-y-6 relative z-10 overflow-hidden">
+        
+        <!-- Header Bar -->
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-4">
+          <div class="flex items-center space-x-3 font-mono">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-md shadow-emerald-400/80 animate-pulse"></span>
+            <span class="text-xs md:text-sm text-emerald-400 font-bold tracking-wider">DECRYPTED_SECRET_LOG.TXT</span>
+          </div>
+          <button onclick="closeWishModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2 py-1 transition-colors">✕</button>
+        </div>
+
+        <!-- Rich Interactive Message Body -->
+        <div id="messageScrollBox" class="p-4 md:p-6 rounded-2xl bg-slate-950/30 backdrop-blur-md border border-slate-700/50 text-slate-100 space-y-5 text-sm md:text-base leading-relaxed max-h-[50vh] overflow-y-auto pr-3 shadow-2xl relative z-10">
+          
+          <div class="p-4 rounded-xl bg-blue-500/20 border border-blue-500/50 backdrop-blur-md">
+            <p class="text-lg md:text-xl font-extrabold text-blue-400">
+              Hey Srithar! 🎈
+            </p>
+          </div>
+
+          <p class="text-slate-100 font-medium">
+            Honestly, when we first started talking, I never imagined we’d become this close—and I hope we stay this close forever.
+          </p>
+
+          <p class="text-slate-100 font-medium">
+            I want to see you win in your career... Not just a simple win, but leading, dominating, and getting every single thing you truly deserve. 🚀
+          </p>
+
+          <div class="glass-card-quote p-4 rounded-xl border-l-4 border-l-purple-500 text-purple-200">
+            No matter what you think about yourself, in my eyes, you are the sweetest, kindest, most lovable, and most amazing person. When the world doesn't clap for you, I will. 👏 I will always come running just to tell you how insanely proud I am of the man you are today, and the man you are growing to be.
+          </div>
+
+          <p class="text-slate-100 font-medium">
+            Find me when your family hurts you. Find me when the world feels too heavy to carry alone, or when your heart is breaking... Bruh, it's illegal to laugh together and suffer alone! 🚫 When the silence gets too loud, just find me. I'll sit with you in the dark and stay until I see that sharp, relieved smirk back on your face. 🙂‍↕️ I’ll be right here cheering for you through the big wins, the small wins, the tough days, the absolute chaos, and all the quiet moments in between.
+          </p>
+
+          <div class="p-4 rounded-xl bg-gradient-to-r from-purple-900/60 to-indigo-900/60 border border-purple-500/60 text-purple-200 font-bold text-center text-base md:text-lg shadow-lg backdrop-blur-md">
+            You don't have to pretend you're okay with me... <span class="text-purple-300 underline font-extrabold">NOT EVER</span>. 🫂
+          </div>
+
+          <p class="text-slate-100 font-medium">
+            I know you carry so much more than you ever talk about, and honestly, seeing that haunts me sometimes. I know you can handle everything by yourself—life trained you to be that way. But when you're with me, let me listen. Let me carry some of that weight for you. Strong people deserve a soft place to land, too. 🕯️
+          </p>
+
+          <p class="text-slate-100 font-medium">
+            Let me explain how much you matter to me: whenever you're burdened, I swear I’d give up eating ice cream 🍦 and eat all your worries, your insecurities, your doubts, and your fears instead. I’d swallow every single sleepless thought and every heavy weight just to make sure your light never fades. ✨
+          </p>
+
+          <div class="glass-card-quote p-5 rounded-xl border-l-4 border-l-emerald-400 space-y-3">
+            <p class="text-slate-100 font-medium">
+              Let me also thank you for everything you’ve done for me—even the things you did without noticing that healed me in ways you'll never know. You remembered the little things I thought didn't matter—the quiet parts of me everyone else missed. You remembered tiny words I said, things I had completely forgotten myself. You noticed the silence before I spoke and read my moods like familiar pages. 📖
+            </p>
+            <p class="text-slate-100 font-medium">
+              Even though you say you’re not great at communicating or expressing yourself with words, you still showed up every single time to make me feel better, seen, and valued. <strong class="text-emerald-400 font-extrabold">THANK YOU SO MUCH.</strong> 🤍 I deeply appreciate every little thing you do.
+            </p>
+          </div>
+
+          <p class="text-slate-100 font-medium">
+            I might not be a perfect friend, and I might not always have the exact right words, but I care more than you'll ever realize. I will always be the person pushing you to go after your dreams. 🌟 And whenever you doubt yourself, come to me and borrow my belief in you until you find your own again.
+          </p>
+
+          <p class="text-slate-100 font-medium">
+            On the days when everything feels too heavy and you just want to shut the world out, just remember you still have Aswin, Chef, Prakash, Sathya, Karthiha, and <strong class="text-blue-400 font-bold underline">ME</strong>. I am not going anywhere. 🤜🤛
+          </p>
+
+          <div class="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-semibold text-center backdrop-blur-md">
+            I am forever grateful to have you in my life. I wish every single dream of yours comes true because you deserve every ounce of happiness this world has to offer. 🎂✨
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-base font-bold font-mono">
+            <span class="text-blue-400">Happy Birthday! 🥂</span>
+            <span class="text-purple-400">— Elakkiya (MCA) 👹👹</span>
+          </div>
+
+        </div>
+
+        <!-- Footer Actions in Modal -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 relative z-10">
+          <button onclick="closeWishModal()" class="w-full sm:w-auto px-6 py-3 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs tracking-wider uppercase transition-all border border-slate-700 font-mono">
+            Close Message
+          </button>
+          
+          <!-- EXPANDABLE MEDIA GALLERY TRIGGER BUTTON -->
+          <button onclick="toggleMediaSection()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 hover:from-purple-500 hover:to-red-400 text-white font-extrabold rounded-xl text-xs md:text-sm tracking-wide shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 border border-pink-400/40">
+            <span>Moments of Srithika🤍 ✨</span>
+          </button>
+        </div>
+
+        <!-- EXPANDABLE MEDIA VAULT ALBUM (ALL FILES IN ASSETS SUBFOLDERS) -->
+        <div id="mediaSection" class="hidden pt-6 border-t border-slate-800/80 space-y-6 relative z-10">
+          
+          <div class="flex items-center justify-between font-mono">
+            <span class="text-xs text-pink-400 font-bold uppercase tracking-widest">📷 MEDIA_VAULT: Moments of Srithika🤍</span>
+            <span class="text-[11px] text-emerald-400 font-bold">✓ CLICK ANY ITEM TO FOCUS FULL-SCREEN</span>
+          </div>
+
+          <!-- 🎙️ VOICE NOTES SECTION -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">🎙️ Voice Notes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <div class="media-glass-card p-4 rounded-xl space-y-2">
+                <div class="text-xs font-bold text-pink-300">Voice Note #1</div>
+                <audio controls class="w-full rounded-lg h-10">
+                  <source src="assets/audios/audio1.ogg" type="audio/ogg">
+                </audio>
+              </div>
+
+              <div class="media-glass-card p-4 rounded-xl space-y-2">
+                <div class="text-xs font-bold text-pink-300">Voice Note #2</div>
+                <audio controls class="w-full rounded-lg h-10">
+                  <source src="assets/audios/audio2.ogg" type="audio/ogg">
+                </audio>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 🖼️ PHOTO MEMORIES GALLERY -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">🖼️ Photo Gallery (Click to Focus)</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              
+              <div onclick="focusImage('assets/images/img1.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
+                <img src="assets/images/img1.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 1" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
+              </div>
+
+              <div onclick="focusImage('assets/images/img2.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
+                <img src="assets/images/img2.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 2" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
+              </div>
+
+              <div onclick="focusImage('assets/images/niki.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
+                <img src="assets/images/niki.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Niki" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
+              </div>
+
+              <div onclick="focusImage('assets/images/srithar_srithika.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
+                <img src="assets/images/srithar_srithika.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Srithar with Srithika" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 🎬 VIDEO MEMORIES GRID (ALL 13 VIDEOS) -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">🎬 Video Moments (Click to Focus Full-Screen)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <div onclick="focusVideo('assets/videos/vid1.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid1.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid2.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid2.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid3.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid3.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid4.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid4.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid5.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid5.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid6.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid6.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid7.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid7.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid8.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid8.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid9.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid9.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid10.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid10.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid11.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid11.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid12.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid12.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+              <div onclick="focusVideo('assets/videos/vid13.mp4')" class="media-glass-card p-2 rounded-xl space-y-1 relative group">
+                <video class="w-full h-40 rounded-lg object-cover pointer-events-none">
+                  <source src="assets/videos/vid13.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all rounded-xl flex items-center justify-center">
+                  <span class="text-3xl">▶️</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL-SCREEN FOCUS LIGHTBOX OVERLAY -->
+  <div id="mediaFocusModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl transition-opacity duration-300">
+    <div class="cyber-gradient-wrapper max-w-4xl w-full relative overflow-hidden p-2">
+      <div class="cyber-glass p-4 rounded-2xl flex flex-col items-center justify-center relative">
+        
+        <button onclick="closeMediaFocus()" class="absolute top-3 right-3 text-slate-300 hover:text-white bg-slate-800/80 p-2 rounded-full font-bold z-20">✕ Close Focus</button>
+        
+        <div id="mediaFocusContainer" class="w-full flex items-center justify-center max-h-[80vh] overflow-hidden rounded-xl">
+          <!-- Dynamic Image or Video Injected Here -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // 1. REAL-TIME AUDIO SYNTHESIZER
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(freq, type = 'sine', duration = 0.1) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    // Live Clock
+    setInterval(() => {
+      document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    // 2. THREE.JS 3D SCENE
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas3d'), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // Rotating 3D Torus Knot Geometry
+    const torusGeo = new THREE.TorusKnotGeometry(1.2, 0.35, 120, 16);
+    const torusMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true, transparent: true, opacity: 0.35 });
+    const torusKnot = new THREE.Mesh(torusGeo, torusMat);
+    scene.add(torusKnot);
+
+    // Particle Swarm
+    const particleCount = 3000;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    const colorChoices = [new THREE.Color('#3b82f6'), new THREE.Color('#8b5cf6'), new THREE.Color('#10b981')];
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      const r = 3.2 + Math.random() * 0.8;
+
+      positions[i] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i + 2] = r * Math.cos(phi);
+
+      const color = colorChoices[Math.floor(Math.random() * colorChoices.length)];
+      colors[i] = color.r;
+      colors[i + 1] = color.g;
+      colors[i + 2] = color.b;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.035,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85
+    });
+
+    const particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+    camera.position.z = 5.5;
+
+    // Mouse Interaction
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 0.6;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.6;
+    });
+
+    // Render Loop
+    let speedMultiplier = 1;
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      torusKnot.rotation.x += 0.005 * speedMultiplier;
+      torusKnot.rotation.y += 0.008 * speedMultiplier;
+
+      particleSystem.rotation.y += 0.002 * speedMultiplier;
+      particleSystem.rotation.x += 0.001 * speedMultiplier;
+
+      camera.position.x += (mouseX - camera.position.x) * 0.05;
+      camera.position.y += (-mouseY - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // 3. MODAL INTERNAL FLOATING PARTICLES CANVAS
+    const mCanvas = document.getElementById('modalParticleCanvas');
+    const mCtx = mCanvas.getContext('2d');
+    let mParticles = [];
+
+    function resizeModalCanvas() {
+      if (mCanvas && mCanvas.parentElement) {
+        mCanvas.width = mCanvas.parentElement.clientWidth;
+        mCanvas.height = mCanvas.parentElement.clientHeight;
+      }
+    }
+
+    class ModalParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * mCanvas.width;
+        this.y = Math.random() * mCanvas.height;
+        this.size = Math.random() * 2.5 + 1.2;
+        this.speedY = -(Math.random() * 0.8 + 0.3);
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.7 + 0.3;
+        this.color = ['#3b82f6', '#a855f7', '#10b981', '#ec4899', '#38bdf8'][Math.floor(Math.random() * 5)];
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        if (this.y < 0 || this.x < 0 || this.x > mCanvas.width) {
+          this.y = mCanvas.height;
+          this.x = Math.random() * mCanvas.width;
+        }
+      }
+      draw() {
+        mCtx.fillStyle = this.color;
+        mCtx.globalAlpha = this.opacity;
+        mCtx.beginPath();
+        mCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        mCtx.fill();
+      }
+    }
+
+    function initModalParticles() {
+      resizeModalCanvas();
+      mParticles = [];
+      for (let i = 0; i < 70; i++) {
+        mParticles.push(new ModalParticle());
+      }
+    }
+
+    function animateModalParticles() {
+      if (!document.getElementById('wishModal').classList.contains('hidden')) {
+        mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
+        mParticles.forEach(p => { p.update(); p.draw(); });
+      }
+      requestAnimationFrame(animateModalParticles);
+    }
+    animateModalParticles();
+
+    // 4. ENTER KEY OR LAUNCH PROTOCOL
+    const cmdInput = document.getElementById('cmdInput');
+    let unlocked = false;
+
+    cmdInput.addEventListener('keydown', (e) => {
+      playSound(600, 'square', 0.05);
+      if (e.key === 'Enter') {
+        if (!unlocked) {
+          unlockGrandScene();
+        }
+      }
+    });
+
+    // UNLOCK CELEBRATION SCENE
+    function unlockGrandScene() {
+      if (unlocked) return;
+      unlocked = true;
+
+      playSound(800, 'sine', 0.35);
+      
+      document.getElementById('scene1').classList.add('hidden');
+      const scene2 = document.getElementById('scene2');
+      scene2.classList.remove('hidden');
+
+      speedMultiplier = 3.5;
+      torusMat.color.setHex(0x10b981);
+      
+      launchSupernova();
+    }
+
+    function launchSupernova() {
+      playSound(440, 'triangle', 0.5);
+      
+      const duration = 3.5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 8,
+          angle: 60,
+          spread: 60,
+          origin: { x: 0 },
+          colors: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b']
+        });
+        confetti({
+          particleCount: 8,
+          angle: 120,
+          spread: 60,
+          origin: { x: 1 },
+          colors: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    // 5. MODAL POPUP LOGIC FOR SECRET MESSAGE
+    function openWishModal() {
+      playSound(750, 'sine', 0.15);
+      const modal = document.getElementById('wishModal');
+      const content = document.getElementById('modalContent');
+      modal.classList.remove('hidden');
+      setTimeout(initModalParticles, 20);
+      setTimeout(() => {
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeWishModal() {
+      playSound(500, 'square', 0.08);
+      const modal = document.getElementById('wishModal');
+      const content = document.getElementById('modalContent');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    function toggleMediaSection() {
+      playSound(850, 'sine', 0.12);
+      const mediaSection = document.getElementById('mediaSection');
+      mediaSection.classList.toggle('hidden');
+      
+      if (!mediaSection.classList.contains('hidden')) {
+        setTimeout(() => {
+          mediaSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+
+    // 6. FULL-SCREEN LIGHTBOX MEDIA FOCUS LOGIC
+    function focusImage(src) {
+      playSound(700, 'sine', 0.1);
+      const focusModal = document.getElementById('mediaFocusModal');
+      const container = document.getElementById('mediaFocusContainer');
+      container.innerHTML = `<img src="${src}" class="max-h-[75vh] w-auto rounded-xl object-contain shadow-2xl" />`;
+      focusModal.classList.remove('hidden');
+    }
+
+    function focusVideo(src) {
+      playSound(700, 'sine', 0.1);
+      const focusModal = document.getElementById('mediaFocusModal');
+      const container = document.getElementById('mediaFocusContainer');
+      container.innerHTML = `<video controls autoplay class="max-h-[75vh] w-full rounded-xl object-contain shadow-2xl"><source src="${src}" type="video/mp4"></video>`;
+      focusModal.classList.remove('hidden');
+    }
+
+    function closeMediaFocus() {
+      playSound(500, 'square', 0.08);
+      const focusModal = document.getElementById('mediaFocusModal');
+      const container = document.getElementById('mediaFocusContainer');
+      container.innerHTML = '';
+      focusModal.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
