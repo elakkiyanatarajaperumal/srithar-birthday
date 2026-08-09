@@ -107,10 +107,7 @@
     ::-webkit-scrollbar-track { background: #020617; }
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #a855f7); border-radius: 4px; }
   
-    /* =========================================================
-       ULTRA-RICH UI ENHANCEMENT LAYER
-       ========================================================= */
-
+    /* ULTRA-RICH UI ENHANCEMENT LAYER */
     :root {
       --ui-blue: #38bdf8;
       --ui-purple: #a855f7;
@@ -173,7 +170,6 @@
       to { transform: translateY(135%); }
     }
 
-    /* Make existing panels feel deeper */
     .cyber-gradient-wrapper {
       isolation: isolate;
       overflow: visible;
@@ -221,7 +217,6 @@
       100% { transform: translate3d(var(--orb-x),-40px,0) scale(1.35); opacity:.15; }
     }
 
-    /* Rich button shine */
     button {
       position: relative;
       overflow: hidden;
@@ -247,7 +242,6 @@
 
     button:hover::before { left: 125%; }
 
-    /* Stats become holographic */
     #scene2 .grid > div {
       position: relative;
       overflow: hidden;
@@ -274,10 +268,8 @@
       70%, 100% { transform: translateX(120%); }
     }
 
-    /* Terminal cursor */
     #cmdInput { caret-color: #34d399; }
 
-    /* Modal enhancement */
     #wishModal {
       background:
         radial-gradient(circle at 50% 20%, rgba(168,85,247,.16), transparent 38%),
@@ -385,11 +377,8 @@
           <stop offset="1" stop-color="#172554"/>
         </linearGradient>
       </defs>
-      <!-- web strand -->
       <path d="M60 0 C54 18 67 27 61 40" fill="none" stroke="#e2e8f0" stroke-width="1.2" opacity=".75"/>
-      <!-- head -->
       <ellipse cx="61" cy="51" rx="23" ry="28" fill="url(#maskRed)" stroke="#fca5a5" stroke-width="1"/>
-      <!-- mask web -->
       <g fill="none" stroke="#fecaca" stroke-width=".8" opacity=".8">
         <path d="M61 24 Q58 39 61 78"/>
         <path d="M38 50 Q60 45 84 50"/>
@@ -398,30 +387,22 @@
         <path d="M48 29 Q61 48 74 73"/>
         <path d="M74 29 Q61 48 48 73"/>
       </g>
-      <!-- eyes -->
       <path d="M43 43 Q50 35 56 45 Q51 54 43 54Z" fill="white" stroke="#0f172a" stroke-width="2"/>
       <path d="M66 45 Q73 35 80 43 L80 54 Q71 54 66 45Z" fill="white" stroke="#0f172a" stroke-width="2"/>
-      <!-- neck -->
       <path d="M51 74 L48 83 L73 83 L70 74Z" fill="#dc2626"/>
-      <!-- torso -->
       <path d="M45 81 Q61 75 77 81 L88 123 Q61 137 34 123Z" fill="url(#suitBlue)" stroke="#60a5fa" stroke-width="1"/>
-      <!-- red chest -->
       <path d="M61 80 L72 95 L69 119 L61 126 L53 119 L50 95Z" fill="#dc2626" opacity=".96"/>
-      <!-- spider emblem -->
       <g fill="#111827" stroke="#020617" stroke-width=".8">
         <ellipse cx="61" cy="101" rx="4" ry="10"/>
         <path d="M57 96 L45 91 L47 95 L55 101 L45 103 L47 106 L57 104Z"/>
         <path d="M65 96 L77 91 L75 95 L67 101 L77 103 L75 106 L65 104Z"/>
       </g>
-      <!-- arms -->
       <path d="M46 86 Q24 92 15 111 Q12 116 17 119 Q23 119 29 110 L52 101" fill="none" stroke="#2563eb" stroke-width="11" stroke-linecap="round"/>
       <path d="M76 86 Q96 94 104 112 Q107 118 102 121 Q96 121 90 112 L70 101" fill="none" stroke="#2563eb" stroke-width="11" stroke-linecap="round"/>
-      <!-- legs -->
       <path d="M49 121 Q44 140 32 157" fill="none" stroke="#172554" stroke-width="13" stroke-linecap="round"/>
       <path d="M70 121 Q76 140 89 157" fill="none" stroke="#172554" stroke-width="13" stroke-linecap="round"/>
       <circle cx="31" cy="157" r="5" fill="#dc2626"/>
       <circle cx="90" cy="157" r="5" fill="#dc2626"/>
-      <!-- motion sparkles -->
       <g fill="#fff">
         <circle cx="8" cy="83" r="1.6"/><circle cx="108" cy="63" r="1.2"/>
         <circle cx="102" cy="141" r="1.4"/><circle cx="19" cy="47" r="1"/>
@@ -716,58 +697,58 @@
             </div>
           </div>
 
-          <!-- PHOTO MEMORIES GALLERY -->
+          <!-- PHOTO MEMORIES GALLERY (8 EXACT ITEMS) -->
           <div class="space-y-3">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">🖼️ Photo Gallery (Click to Focus)</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
               
               <div onclick="focusImage('assets/images/img1.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img1.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 1" />
+                <img src="assets/images/img1.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 1" onerror="this.onerror=null; this.src='assets/images/img1.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
               <div onclick="focusImage('assets/images/img2.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img2.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 2" />
+                <img src="assets/images/img2.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 2" onerror="this.onerror=null; this.src='assets/images/img2.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
               <div onclick="focusImage('assets/images/niki.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/niki.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Niki" />
+                <img src="assets/images/niki.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Niki" onerror="this.onerror=null; this.src='assets/images/niki.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
               <div onclick="focusImage('assets/images/srithar_srithika.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/srithar_srithika.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Srithar with Srithika" />
+                <img src="assets/images/srithar_srithika.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Srithar with Srithika" onerror="this.onerror=null; this.src='assets/images/srithar_srithika.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
               <div onclick="focusImage('assets/images/img3.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img3.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 3" />
+                <img src="assets/images/img3.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 3" onerror="this.onerror=null; this.src='assets/images/img3.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
               
               <div onclick="focusImage('assets/images/img4.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img4.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 4" />
+                <img src="assets/images/img4.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 4" onerror="this.onerror=null; this.src='assets/images/img4.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
               
               <div onclick="focusImage('assets/images/img5.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img5.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 5" />
+                <img src="assets/images/img5.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 5" onerror="this.onerror=null; this.src='assets/images/img5.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
               
               <div onclick="focusImage('assets/images/img6.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img6.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 6" />
+                <img src="assets/images/img6.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 6" onerror="this.onerror=null; this.src='assets/images/img6.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
               <div onclick="focusImage('assets/images/img7.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img7.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 7" />
+                <img src="assets/images/img7.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 7" onerror="this.onerror=null; this.src='assets/images/img7.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
               
               <div onclick="focusImage('assets/images/img8.jpeg')" class="media-glass-card p-2 rounded-xl overflow-hidden group relative">
-                <img src="assets/images/img8.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 8" />
+                <img src="assets/images/img8.jpeg" class="rounded-lg w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110" alt="Memory 8" onerror="this.onerror=null; this.src='assets/images/img8.jpg';" />
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 Tap to View</div>
               </div>
 
