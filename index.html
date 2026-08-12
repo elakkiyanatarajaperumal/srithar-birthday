@@ -97,17 +97,18 @@
     }
 
     /* Cyber Glass Panel with Shimmer Reflection */
-    .cyber-glass {
+    .hud-glass, .cyber-glass {
       position: relative;
       background: linear-gradient(135deg, rgba(6, 12, 28, 0.92), rgba(12, 20, 42, 0.82));
       backdrop-filter: blur(32px);
       -webkit-backdrop-filter: blur(32px);
       border-radius: 1.4rem;
       border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
       overflow: hidden;
     }
 
-    .cyber-glass::before, .rich-modal-glass::before {
+    .hud-glass::before, .cyber-glass::before, .rich-modal-glass::before {
       content: "";
       position: absolute;
       inset: -100% -30%;
@@ -231,21 +232,21 @@
     #cmdInput { caret-color: #34d399; }
 
     /* =========================================================
-       SPIDER-MAN FLOATERS - PRECISE SCALING
+       EXACT ORIGINAL SPIDER-MAN FLOATERS (PROPERLY PROPORTIONED)
        ========================================================= */
     .spidey-floater {
       position: fixed;
       z-index: 8;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8)) drop-shadow(0 0 20px rgba(37, 99, 235, 0.5));
+      filter: drop-shadow(0 0 8px rgba(239,68,68,.65)) drop-shadow(0 0 22px rgba(37,99,235,.35));
       animation: spideyDrift var(--drift-time) ease-in-out infinite, spideyTilt var(--tilt-time) ease-in-out infinite alternate;
     }
 
     .spidey-one {
       left: 2.5vw;
-      top: 12vh;
-      width: clamp(70px, 7.5vw, 110px);
+      top: 10vh;
+      width: clamp(75px, 8.5vw, 120px);
       aspect-ratio: 1 / 1.35;
       --drift-time: 7s;
       --tilt-time: 2.8s;
@@ -254,9 +255,9 @@
     .spidey-three {
       right: 2.5vw;
       top: 8vh;
-      width: clamp(60px, 6.5vw, 95px);
+      width: clamp(65px, 7.5vw, 105px);
       aspect-ratio: 1 / 1.35;
-      opacity: .9;
+      opacity: .88;
       --drift-time: 10s;
       --tilt-time: 3.5s;
       animation-delay: -4s, -1.2s;
@@ -264,9 +265,9 @@
 
     @keyframes spideyDrift {
       0%   { translate: 0 0; }
-      25%  { translate: 12px -16px; }
-      50%  { translate: -5px -28px; }
-      75%  { translate: -14px -8px; }
+      25%  { translate: 14px -18px; }
+      50%  { translate: -6px -28px; }
+      75%  { translate: -16px -10px; }
       100% { translate: 0 0; }
     }
 
@@ -280,15 +281,15 @@
       z-index: 7;
       width: 1.5px;
       height: 18vh;
-      background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(56,189,248,.5), transparent);
+      background: linear-gradient(to bottom, rgba(255,255,255,.85), rgba(56,189,248,.4), transparent);
       transform-origin: top;
       pointer-events: none;
-      opacity: .5;
+      opacity: .45;
       animation: webSwing 5s ease-in-out infinite alternate;
     }
 
-    .web-left { left: 5.5vw; top: 0; rotate: 4deg; }
-    .web-right { right: 5.5vw; top: 0; rotate: -4deg; animation-delay: -2s; }
+    .web-left { left: 6.5vw; top: 0; rotate: 5deg; }
+    .web-right { right: 6.5vw; top: 0; rotate: -5deg; animation-delay: -2s; }
 
     @keyframes webSwing {
       from { transform: rotate(-4deg); }
@@ -297,8 +298,8 @@
 
     @media (max-width: 768px) {
       .spidey-floater { opacity: .45; }
-      .spidey-one { left: -5px; top: 10vh; width: 65px; }
-      .spidey-three { right: -5px; top: 6vh; width: 55px; }
+      .spidey-one { left: -5px; top: 10vh; width: 70px; }
+      .spidey-three { right: -5px; top: 6vh; width: 60px; }
     }
 
     /* Tab Switcher Styling */
@@ -358,11 +359,48 @@
       100% { height: 100%; }
     }
 
-    /* Vault Modal Backdrop Base */
+    /* Modal Backdrops */
+    #wishModal {
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.25), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.25), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.18), transparent 55%),
+        rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+    }
+
+    #wishModal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.15;
+      background-image:
+        linear-gradient(rgba(236, 72, 153, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.2) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: modalGridMove 25s linear infinite;
+    }
+
+    @keyframes modalGridMove {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(40px, 40px, 0); }
+    }
+
     #vaultModal {
       background: rgba(2, 6, 23, 0.88);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
+    }
+
+    #mediaFocusModal {
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.3), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.3), transparent 50%),
+        rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
     }
   </style>
 </head>
@@ -371,7 +409,7 @@
   <!-- 3D DYNAMIC BACKGROUND CANVAS -->
   <canvas id="canvas3d"></canvas>
 
-  <!-- FLOATING ANIME SPIDER HERO DECORATION -->
+  <!-- ORIGINAL DETAILED SPIDER-MAN SVG HEROES -->
   <div class="spidey-web-line web-left"></div>
   <div class="spidey-web-line web-right"></div>
 
@@ -443,55 +481,64 @@
   <span class="ui-orb" style="left:91%;top:76%;color:#ec4899;--orb-time:6.4s;--orb-x:-30px"></span>
   <span class="ui-orb" style="left:5%;top:78%;color:#10b981;--orb-time:8.1s;--orb-x:50px"></span>
 
-  <!-- OVERLAY UI LAYER -->
+  <!-- MAIN HUD UI OVERLAY -->
   <div class="relative z-10 flex flex-col justify-between min-h-screen p-4 md:p-8 pointer-events-none">
     
-    <!-- TOP BAR -->
-    <header class="flex items-center justify-between w-full max-w-5xl mx-auto cyber-gradient-wrapper pointer-events-auto">
+    <!-- HEADER BAR -->
+    <header class="hud-glass w-full max-w-6xl mx-auto px-6 py-4 flex items-center justify-between pointer-events-auto cyber-gradient-wrapper">
       <div class="cyber-glass w-full px-5 py-3.5 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-          </span>
-          <span class="text-xs md:text-sm font-bold tracking-widest text-emerald-400 neon-emerald-glow font-mono">
-            CORE://SRITHAR_CORE_SYSTEMS
-          </span>
+          <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center font-bold text-cyan-400 font-mono">S</div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm font-extrabold text-white tracking-wider font-mono">SRITHIKA</span>
+              <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+              <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest">CORE://BIRTHDAY_DEPLOYMENT</span>
+            </div>
+          </div>
         </div>
-        <div class="text-xs text-slate-400 font-mono">
-          AUG 15 • <span id="clock" class="text-blue-400 font-bold">00:00:00</span>
+
+        <div class="hidden md:flex items-center space-x-6">
+          <div class="text-xs font-mono text-slate-400 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
+            🕒 AUG 15 • <span id="clock" class="text-cyan-400 font-bold">00:00:00</span>
+          </div>
+          <button onclick="openWishModal()" class="px-4 py-2 bg-slate-900/90 hover:bg-slate-800 text-xs font-mono text-cyan-400 border border-slate-700 rounded-xl transition-all flex items-center space-x-2">
+            <span>💬 MESSAGE</span>
+          </button>
+          <button onclick="openVaultModal()" class="px-4 py-2 bg-slate-900/90 hover:bg-slate-800 text-xs font-mono text-pink-400 border border-slate-700 rounded-xl transition-all flex items-center space-x-2">
+            <span>🎞️ VAULT</span>
+          </button>
         </div>
       </div>
     </header>
 
-    <!-- MAIN INTERACTIVE CONTAINER -->
-    <main class="w-full max-w-4xl mx-auto my-auto py-6 pointer-events-auto">
+    <!-- MAIN DASHBOARD -->
+    <main class="w-full max-w-6xl mx-auto my-auto py-6 pointer-events-auto">
       
       <!-- SCENE 1: TERMINAL INTERFACE -->
-      <div id="scene1" class="cyber-gradient-wrapper transition-all duration-700">
+      <div id="scene1" class="cyber-gradient-wrapper max-w-3xl mx-auto overflow-hidden">
         <div class="cyber-glass overflow-hidden">
-          
-          <div class="bg-slate-950/90 px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between font-mono">
+          <div class="bg-slate-950/90 px-5 py-3.5 border-b border-slate-800 flex items-center justify-between font-mono">
             <div class="flex items-center space-x-2.5">
-              <div class="w-3.5 h-3.5 rounded-full bg-red-500/90 shadow-lg shadow-red-500/50"></div>
-              <div class="w-3.5 h-3.5 rounded-full bg-yellow-500/90 shadow-lg shadow-yellow-500/50"></div>
-              <div class="w-3.5 h-3.5 rounded-full bg-emerald-500/90 shadow-lg shadow-emerald-500/50"></div>
-              <span class="text-xs text-slate-400 font-semibold ml-3">bash — srithar@dev-core: ~</span>
+              <div class="w-3.5 h-3.5 rounded-full bg-red-500"></div>
+              <div class="w-3.5 h-3.5 rounded-full bg-yellow-500"></div>
+              <div class="w-3.5 h-3.5 rounded-full bg-emerald-500"></div>
+              <span class="text-xs text-slate-400 ml-3">bash — srithar@dev-core: ~</span>
             </div>
             <span class="text-[11px] font-bold text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full border border-purple-500/40">
               USER: SRITHAR (THE LEGEND)
             </span>
           </div>
 
-          <div class="p-6 md:p-8 space-y-6 relative scanlines font-mono">
+          <div class="p-6 md:p-8 space-y-6 scanlines font-mono">
             <div class="space-y-2 text-xs md:text-sm text-slate-300">
-              <p><span class="text-blue-400 font-bold">sys.init()</span> -&gt; Verifying padipaali metrics...</p>
+              <p><span class="text-cyan-400 font-bold">sys.init()</span> -&gt; Verifying padipaali metrics...</p>
               <p><span class="text-emerald-400 font-bold">✓ PASS</span> -&gt; Overthinking Mindset detected.</p>
               <p><span class="text-emerald-400 font-bold">✓ PASS</span> -&gt; Topping Capabilities verified.</p>
               <p class="text-amber-400 font-bold animate-pulse pt-1">&gt; ACTION REQUIRED: Press [ENTER] to execute birthday deployment.</p>
             </div>
 
-            <div class="bg-slate-950/90 p-5 rounded-xl border border-slate-800/90 shadow-2xl space-y-4">
+            <div class="bg-slate-950/90 p-5 rounded-xl border border-slate-800 shadow-2xl space-y-4">
               <div id="terminalOutput" class="space-y-2 text-slate-300 text-sm max-h-48 overflow-y-auto pr-2">
                 <div class="text-slate-200">
                   Press <span class="text-emerald-400 font-bold">'ENTER'</span> to bypass protocol & launch celebration! 🚀
@@ -505,7 +552,7 @@
             </div>
 
             <div class="pt-2 flex justify-center">
-              <button onclick="unlockGrandScene()" class="w-full md:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-blue-600 to-purple-600 hover:from-emerald-400 hover:to-purple-500 text-white font-bold rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2">
+              <button onclick="unlockGrandScene()" class="w-full md:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-500 via-cyan-600 to-purple-600 hover:from-emerald-400 hover:to-purple-500 text-white font-bold rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 text-sm">
                 <span>🚀 Press ENTER or Click Here to Launch</span>
               </button>
             </div>
@@ -513,62 +560,140 @@
         </div>
       </div>
 
-      <!-- SCENE 2: GRAND CELEBRATION CARD -->
-      <div id="scene2" class="hidden cyber-gradient-wrapper transition-all duration-1000">
-        <div class="cyber-glass p-6 md:p-10 space-y-8">
+      <!-- SCENE 2: GRAND HIGH-TECH CELEBRATION HUD -->
+      <div id="scene2" class="hidden space-y-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           
-          <div class="text-center space-y-3">
-            <span class="px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-xs text-emerald-400 font-bold tracking-wider uppercase inline-block shadow-lg font-mono">
-              ✓ SYSTEM DEPLOYMENT SUCCESSFUL
-            </span>
-            <h1 class="text-4xl md:text-7xl font-extrabold text-white neon-glow-text tracking-tight font-display">
-              HAPPY BIRTHDAY,<br/>
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">SRITHIKA</span>😂💗
-            </h1>
-            <p class="text-slate-400 text-sm md:text-base font-semibold">
-              Master of Code • Talented Girlieee
-            </p>
+          <!-- LEFT HERO TRANSMISSION PANEL -->
+          <div class="lg:col-span-2 cyber-gradient-wrapper relative overflow-hidden">
+            <div class="cyber-glass p-8 md:p-10 flex flex-col justify-between space-y-8 h-full">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <span class="px-3.5 py-1 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-[11px] text-emerald-400 font-bold tracking-wider uppercase font-mono">
+                    ✓ SYSTEM DEPLOYMENT SUCCESSFUL
+                  </span>
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight font-display leading-tight">
+                  HAPPY BIRTHDAY,<br/>
+                  <span class="neon-glow-text text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-300 to-pink-500">SRITHIKA</span> 😂💗
+                </h1>
+                <p class="text-slate-400 text-sm md:text-base font-semibold">
+                  Master of Code • Talented Girlieee
+                </p>
+              </div>
+
+              <p class="text-slate-300 text-sm max-w-xl leading-relaxed">
+                Some people make the world brighter without even trying. This little neon universe is yours for the day.
+              </p>
+
+              <!-- DUAL SEPARATE MODAL TRIGGER BUTTONS -->
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                <button onclick="openWishModal()" class="px-7 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 text-sm border border-cyan-400/30">
+                  <span>💬 Inga message vachiruken ngaa ›</span>
+                </button>
+
+                <button onclick="openVaultModal()" class="px-7 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-extrabold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 text-sm border border-pink-400/30">
+                  <span>📷 Moments of Srithika and Vaalapoo 🤍✨ ›</span>
+                </button>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="launchSupernova()" class="text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors flex items-center space-x-1.5">
+                  <span>✨ Release a little birthday chaos ↗</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-blue-500/30 text-center shadow-lg">
-              <div class="text-3xl font-bold text-blue-400 font-mono">∞</div>
-              <div class="text-xs text-slate-400 font-bold mt-1">Shared Memes, Anime and Movies</div>
-            </div>
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-emerald-500/30 text-center shadow-lg">
-              <div class="text-3xl font-bold text-emerald-400 font-mono">100%</div>
-              <div class="text-xs text-slate-400 font-bold mt-1">Procrastination Accuracy</div>
-            </div>
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-purple-500/30 text-center shadow-lg">
-              <div class="text-3xl font-bold text-purple-400 font-mono">🍵 999+</div>
-              <div class="text-xs text-slate-400 font-bold mt-1">Tea Cups Consumed</div>
-            </div>
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-amber-500/30 text-center shadow-lg">
-              <div class="text-3xl font-bold text-amber-400 font-mono">GOD TIER</div>
-              <div class="text-xs text-slate-400 font-bold mt-1">Developer Skill</div>
-            </div>
-          </div>
+          <!-- RIGHT CELEBRATION STATUS NODE PANEL -->
+          <div class="cyber-gradient-wrapper relative">
+            <div class="cyber-glass p-8 flex flex-col justify-between space-y-6 h-full">
+              <div class="flex items-center justify-between font-mono text-xs text-slate-400">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span class="text-emerald-400 font-bold uppercase">CELEBRATION_STATUS</span>
+                </div>
+                <span>v.08.15</span>
+              </div>
 
-          <!-- DUAL SEPARATE MODAL TRIGGER BUTTONS -->
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <!-- WINDOW 1 LAUNCH -->
-            <button onclick="openWishModal()" class="w-full sm:w-auto px-7 py-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 border border-emerald-400/30">
-              <span>✉️ Inga message vachiruken ngaa</span>
-            </button>
-            <!-- WINDOW 2 LAUNCH -->
-            <button onclick="openVaultModal()" class="w-full sm:w-auto px-7 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-extrabold rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 border border-pink-400/40">
-              <span>📷 Moments of Srithika and Vaalapoo🤍✨</span>
-            </button>
+              <!-- Orbital Graphics Centerpiece -->
+              <div class="my-auto flex flex-col items-center justify-center py-6 relative">
+                <div class="w-36 h-36 rounded-full border border-pink-500/40 flex items-center justify-center relative shadow-2xl shadow-pink-500/20">
+                  <div class="w-28 h-28 rounded-full border border-cyan-400/30 animate-spin" style="animation-duration: 12s"></div>
+                  <div class="absolute text-center space-y-1">
+                    <div class="text-[10px] font-mono font-bold text-pink-400 tracking-widest uppercase">SRITHIKA</div>
+                    <div class="text-2xl">💖</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-4 pt-4 border-t border-slate-800 font-mono">
+                <div>
+                  <h3 class="text-lg font-extrabold text-white font-display uppercase">THE LEGEND HAS ARRIVED</h3>
+                  <span class="text-[11px] text-slate-400">birthday_core / online</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-[10px] text-slate-400 pt-2">
+                  <div>
+                    <div class="text-slate-500">NODE</div>
+                    <div class="text-white font-bold">SR-15</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-500">MOOD</div>
+                    <div class="text-emerald-400 font-bold">IMMACULATE</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-500">ENERGY</div>
+                    <div class="text-cyan-400 font-bold">999+</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
+
+        <!-- SLEEK PILL STATS ROW -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          
+          <div class="cyber-glass p-5 relative overflow-hidden">
+            <div class="h-1 bg-cyan-400 absolute top-0 left-0 right-0"></div>
+            <div class="text-3xl font-extrabold text-cyan-400 font-mono">∞</div>
+            <div class="text-xs font-bold text-slate-300 mt-2">Shared Memes, Anime and Movies</div>
+          </div>
+
+          <div class="cyber-glass p-5 relative overflow-hidden">
+            <div class="h-1 bg-pink-500 absolute top-0 left-0 right-0"></div>
+            <div class="text-3xl font-extrabold text-pink-400 font-mono">100%</div>
+            <div class="text-xs font-bold text-slate-300 mt-2">Procrastination Accuracy</div>
+          </div>
+
+          <div class="cyber-glass p-5 relative overflow-hidden">
+            <div class="h-1 bg-purple-400 absolute top-0 left-0 right-0"></div>
+            <div class="text-3xl font-extrabold text-purple-400 font-mono">🍵 999+</div>
+            <div class="text-xs font-bold text-slate-300 mt-2">Tea Cups Consumed</div>
+          </div>
+
+          <div class="cyber-glass p-5 relative overflow-hidden">
+            <div class="h-1 bg-amber-400 absolute top-0 left-0 right-0"></div>
+            <div class="text-3xl font-extrabold text-amber-400 font-mono font-display tracking-wider">GOD TIER</div>
+            <div class="text-xs font-bold text-slate-300 mt-2">Developer Skill</div>
+          </div>
+
+        </div>
+
       </div>
 
     </main>
 
-    <footer class="w-full max-w-5xl mx-auto flex items-center justify-between text-xs text-slate-500 pt-4 pointer-events-auto font-mono">
+    <footer class="w-full max-w-6xl mx-auto flex items-center justify-between text-xs text-slate-500 pt-4 pointer-events-auto font-mono">
       <div>Crafted specially for Srithar</div>
-      <div>Hosted on GitHub Pages</div>
+      <div class="flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="text-emerald-400 font-bold">ALL SYSTEMS CELEBRATING</span>
+      </div>
     </footer>
   </div>
 
@@ -576,9 +701,10 @@
   <!-- =========================================================
        WINDOW 1: SEPARATE SECRET MESSAGE LOG WINDOW
        ========================================================= -->
-  <div id="wishModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-6 bg-slate-950/80 backdrop-blur-md transition-opacity duration-500 overflow-y-auto">
-    <div class="cyber-gradient-wrapper max-w-4xl w-full my-auto transform scale-95 transition-all duration-300 relative overflow-hidden" id="wishModalContent">
-      <canvas id="modalParticleCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+  <div id="wishModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-6 transition-opacity duration-500 overflow-y-auto">
+    <canvas id="modalParticleCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+    <div class="cyber-gradient-wrapper max-w-4xl w-full my-auto transform scale-95 transition-all duration-300 relative overflow-hidden z-10" id="wishModalContent">
       <div class="rich-modal-glass rounded-2xl p-6 md:p-10 space-y-6 relative z-10 overflow-hidden">
         
         <div class="flex items-center justify-between border-b border-slate-700/60 pb-4">
@@ -589,7 +715,7 @@
           <button onclick="closeWishModal()" class="text-slate-400 hover:text-white text-2xl font-bold px-2.5 py-1 bg-slate-800/80 rounded-xl transition-colors">✕</button>
         </div>
 
-        <div id="messageScrollBox" class="p-4 md:p-6 rounded-2xl bg-slate-950/40 backdrop-blur-md border border-slate-700/50 text-slate-100 space-y-5 text-sm md:text-base leading-relaxed max-h-[55vh] overflow-y-auto pr-3 shadow-2xl relative z-10">
+        <div id="messageScrollBox" class="p-4 md:p-6 rounded-2xl bg-slate-950/50 backdrop-blur-md border border-slate-700/50 text-slate-100 space-y-5 text-sm md:text-base leading-relaxed max-h-[55vh] overflow-y-auto pr-3 shadow-2xl relative z-10">
           
           <div class="p-4 rounded-xl bg-blue-500/20 border border-blue-500/50 backdrop-blur-md">
             <p class="text-lg md:text-xl font-extrabold text-blue-400">
@@ -669,13 +795,11 @@
        ========================================================= -->
   <div id="vaultModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-6 transition-opacity duration-500 overflow-y-auto">
     
-    <!-- CANVAS FOR FLOATING HOLLOW WIREFRAME HEARTS INSIDE VAULT BACKDROP -->
     <canvas id="heartCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
 
     <div class="cyber-gradient-wrapper max-w-5xl w-full my-auto transform scale-95 transition-all duration-300 relative overflow-hidden z-10" id="vaultModalContent">
       <div class="rich-modal-glass rounded-2xl p-6 md:p-10 space-y-6 relative z-10 overflow-hidden">
         
-        <!-- Header Bar -->
         <div class="flex items-center justify-between border-b border-slate-700/60 pb-4">
           <div class="flex items-center space-x-3 font-mono">
             <span class="w-3.5 h-3.5 rounded-full bg-pink-400 shadow-md shadow-pink-400/80 animate-pulse"></span>
@@ -858,10 +982,10 @@
   </div>
 
   <!-- FULL-SCREEN FOCUS LIGHTBOX OVERLAY -->
-  <div id="mediaFocusModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl transition-opacity duration-300">
+  <div id="mediaFocusModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="cyber-gradient-wrapper max-w-4xl w-full relative overflow-hidden p-2">
       <div class="cyber-glass p-4 rounded-2xl flex flex-col items-center justify-center relative">
-        <button onclick="closeMediaFocus()" class="absolute top-3 right-3 text-slate-300 hover:text-white bg-slate-800/80 p-2 rounded-full font-bold z-20">✕ Close Focus</button>
+        <button onclick="closeMediaFocus()" class="absolute top-3 right-3 text-slate-300 hover:text-white bg-slate-800/80 px-4 py-1.5 rounded-full font-bold z-20 text-xs font-mono">✕ Close Focus</button>
         <div id="mediaFocusContainer" class="w-full flex items-center justify-center max-h-[80vh] overflow-hidden rounded-xl"></div>
       </div>
     </div>
@@ -1262,7 +1386,7 @@
   </script>
   
   <script>
-    /* Extra UI Interactions */
+    /* Cursor Glow & Card Interactions */
     const cursorGlow = document.createElement('div');
     cursorGlow.id = 'cursorGlow';
     cursorGlow.style.cssText = `
