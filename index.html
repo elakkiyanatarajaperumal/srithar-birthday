@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Srithika🧿</title>
   
   <!-- Tailwind CSS -->
@@ -12,12 +12,13 @@
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
 
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
     code, .font-mono { font-family: 'Fira Code', monospace; }
-    body { background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    body { background-color: #020617; color: #f8fafc; overflow-x: hidden; touch-action: manipulation; }
     
     #canvas3d {
       position: fixed;
@@ -29,36 +30,107 @@
       pointer-events: auto;
     }
 
-    /* Animated Cyberpunk Neon Border Container */
+    /* AAA Studio Atmosphere Layers */
+    body {
+      background:
+        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.18), transparent 30rem),
+        radial-gradient(circle at 90% 20%, rgba(236, 72, 153, 0.18), transparent 30rem),
+        radial-gradient(circle at 50% 85%, rgba(168, 85, 247, 0.2), transparent 35rem),
+        #020617;
+      isolation: isolate;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.15;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.2) 1px, transparent 1px);
+      background-size: 55px 55px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 92%);
+      animation: gridDrift 20s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(55px, 55px, 0); }
+    }
+
+    /* Conic Rotating Neon Border Wrapper */
     .cyber-gradient-wrapper {
       position: relative;
       border-radius: 1.5rem;
-      background: linear-gradient(135deg, rgba(59,130,246,0.6), rgba(168,85,247,0.6), rgba(16,185,129,0.6));
+      background: conic-gradient(
+        from var(--border-angle, 0deg),
+        rgba(56, 189, 248, 0.95),
+        rgba(236, 72, 153, 0.95),
+        rgba(168, 85, 247, 0.95),
+        rgba(16, 185, 129, 0.95),
+        rgba(56, 189, 248, 0.95)
+      );
       padding: 2px;
-      box-shadow: 0 0 60px rgba(59, 130, 246, 0.35), 0 0 120px rgba(168, 85, 247, 0.25);
-      animation: borderGlow 6s ease infinite alternate;
+      box-shadow: 
+        0 0 50px rgba(56, 189, 248, 0.35),
+        0 0 100px rgba(168, 85, 247, 0.25),
+        inset 0 0 20px rgba(255, 255, 255, 0.12);
+      animation: rotateBorder 8s linear infinite, borderGlow 6s ease infinite alternate;
+    }
+
+    @property --border-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes rotateBorder {
+      to { --border-angle: 360deg; }
     }
 
     @keyframes borderGlow {
-      0% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)); }
-      50% { filter: drop-shadow(0 0 35px rgba(168, 85, 247, 0.7)); }
-      100% { filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.6)); }
+      0% { filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.6)); }
+      50% { filter: drop-shadow(0 0 45px rgba(168, 85, 247, 0.8)); }
+      100% { filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6)); }
     }
 
-    /* Cyber Glass Panel */
+    /* Cyber Glass Panel with Shimmer Reflection */
     .cyber-glass {
-      background: rgba(8, 14, 28, 0.85);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      position: relative;
+      background: linear-gradient(135deg, rgba(6, 12, 28, 0.92), rgba(12, 20, 42, 0.82));
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
       border-radius: 1.4rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+    }
+
+    .cyber-glass::before, .rich-modal-glass::before {
+      content: "";
+      position: absolute;
+      inset: -100% -30%;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.02) 53%, transparent 63%);
+      transform: translateX(-70%) rotate(8deg);
+      animation: glassShimmer 8s ease-in-out infinite;
+    }
+
+    @keyframes glassShimmer {
+      0%, 60% { transform: translateX(-75%) rotate(8deg); }
+      80%, 100% { transform: translateX(75%) rotate(8deg); }
     }
 
     /* Ultra-Rich Glass Modal */
     .rich-modal-glass {
-      background: linear-gradient(135deg, rgba(11, 19, 43, 0.9), rgba(15, 23, 42, 0.95));
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 0 90px rgba(59, 130, 246, 0.45), inset 0 0 35px rgba(168, 85, 247, 0.25);
+      position: relative;
+      background: linear-gradient(135deg, rgba(8, 15, 35, 0.96), rgba(15, 23, 42, 0.98));
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 0 100px rgba(56, 189, 248, 0.45), inset 0 0 35px rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      overflow: hidden;
     }
 
     /* CRT Scanlines Visual Effect */
@@ -67,14 +139,14 @@
         to bottom,
         rgba(255,255,255,0),
         rgba(255,255,255,0) 50%,
-        rgba(0, 0, 0, 0.35) 50%,
-        rgba(0, 0, 0, 0.35)
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.3)
       );
       background-size: 100% 4px;
     }
 
     .neon-glow-text {
-      text-shadow: 0 0 18px rgba(59, 130, 246, 0.9), 0 0 35px rgba(168, 85, 247, 0.7);
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.9), 0 0 40px rgba(168, 85, 247, 0.8), 0 0 80px rgba(236, 72, 153, 0.4);
     }
 
     .neon-emerald-glow {
@@ -82,22 +154,22 @@
     }
 
     .glass-card-quote {
-      background: rgba(15, 23, 42, 0.45);
-      border: 1px solid rgba(59, 130, 246, 0.35);
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(12px);
     }
 
     /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #020617; }
-    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #a855f7); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #38bdf8, #a855f7, #ec4899); border-radius: 4px; }
   
     /* Floating micro-orbs */
     .ui-orb {
       position: fixed;
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
       z-index: 4;
       pointer-events: none;
@@ -108,9 +180,9 @@
     }
 
     @keyframes orbFloat {
-      0% { transform: translate3d(0,20px,0) scale(.7); opacity:.25; }
+      0% { transform: translate3d(0, 20px, 0) scale(.7); opacity:.25; }
       50% { opacity:.9; }
-      100% { transform: translate3d(var(--orb-x),-40px,0) scale(1.35); opacity:.15; }
+      100% { transform: translate3d(var(--orb-x), -40px, 0) scale(1.35); opacity:.15; }
     }
 
     button { position: relative; overflow: hidden; }
@@ -123,7 +195,7 @@
       width: 30%;
       height: 260%;
       transform: rotate(25deg);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
       transition: left .65s ease;
       pointer-events: none;
     }
@@ -140,15 +212,15 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.08) 50%, transparent 80%);
+      background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.12) 50%, transparent 80%);
       transform: translateX(-120%);
       animation: cardSweep 5s ease-in-out infinite;
       pointer-events: none;
     }
 
     #scene2 .grid > div:hover {
-      transform: translateY(-8px) rotateX(3deg);
-      box-shadow: 0 22px 55px rgba(56,189,248,.18);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 20px 45px rgba(56,189,248,.25);
     }
 
     @keyframes cardSweep {
@@ -158,58 +230,75 @@
 
     #cmdInput { caret-color: #34d399; }
 
-    /* Spider-Man anime floaters */
+    /* =========================================================
+       SPIDER-MAN FLOATERS - PRECISE SCALING
+       ========================================================= */
     .spidey-floater {
       position: fixed;
       z-index: 8;
-      width: clamp(90px, 11vw, 175px);
-      aspect-ratio: 1 / 1.35;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 0 8px rgba(239,68,68,.55)) drop-shadow(0 0 28px rgba(37,99,235,.28));
+      filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8)) drop-shadow(0 0 20px rgba(37, 99, 235, 0.5));
       animation: spideyDrift var(--drift-time) ease-in-out infinite, spideyTilt var(--tilt-time) ease-in-out infinite alternate;
     }
 
-    .spidey-one { left: 2vw; top: 15vh; --drift-time: 7s; --tilt-time: 2.8s; }
-    .spidey-three { right: 13vw; top: 5vh; width: clamp(65px, 8vw, 120px); opacity: .72; --drift-time: 11s; --tilt-time: 3.8s; animation-delay: -5s, -1.4s; }
+    .spidey-one {
+      left: 2.5vw;
+      top: 12vh;
+      width: clamp(70px, 7.5vw, 110px);
+      aspect-ratio: 1 / 1.35;
+      --drift-time: 7s;
+      --tilt-time: 2.8s;
+    }
+
+    .spidey-three {
+      right: 2.5vw;
+      top: 8vh;
+      width: clamp(60px, 6.5vw, 95px);
+      aspect-ratio: 1 / 1.35;
+      opacity: .9;
+      --drift-time: 10s;
+      --tilt-time: 3.5s;
+      animation-delay: -4s, -1.2s;
+    }
 
     @keyframes spideyDrift {
       0%   { translate: 0 0; }
-      25%  { translate: 22px -28px; }
-      50%  { translate: -8px -58px; }
-      75%  { translate: -30px -18px; }
+      25%  { translate: 12px -16px; }
+      50%  { translate: -5px -28px; }
+      75%  { translate: -14px -8px; }
       100% { translate: 0 0; }
     }
 
     @keyframes spideyTilt {
-      from { rotate: -7deg; }
-      to { rotate: 8deg; }
+      from { rotate: -5deg; }
+      to { rotate: 6deg; }
     }
 
     .spidey-web-line {
       position: fixed;
       z-index: 7;
-      width: 1px;
+      width: 1.5px;
       height: 18vh;
-      background: linear-gradient(to bottom, rgba(255,255,255,.7), transparent);
+      background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(56,189,248,.5), transparent);
       transform-origin: top;
       pointer-events: none;
-      opacity: .32;
+      opacity: .5;
       animation: webSwing 5s ease-in-out infinite alternate;
     }
 
-    .web-left { left: 9vw; top: 0; rotate: 7deg; }
-    .web-right { right: 9vw; top: 0; rotate: -7deg; animation-delay: -2s; }
+    .web-left { left: 5.5vw; top: 0; rotate: 4deg; }
+    .web-right { right: 5.5vw; top: 0; rotate: -4deg; animation-delay: -2s; }
 
     @keyframes webSwing {
-      from { transform: rotate(-5deg); }
-      to { transform: rotate(5deg); }
+      from { transform: rotate(-4deg); }
+      to { transform: rotate(4deg); }
     }
 
     @media (max-width: 768px) {
-      .spidey-floater { opacity: .38; }
-      .spidey-one { left: -10px; top: 11vh; }
-      .spidey-three { right: 2vw; top: 4vh; }
+      .spidey-floater { opacity: .45; }
+      .spidey-one { left: -5px; top: 10vh; width: 65px; }
+      .spidey-three { right: -5px; top: 6vh; width: 55px; }
     }
 
     /* Tab Switcher Styling */
@@ -271,9 +360,9 @@
 
     /* Vault Modal Backdrop Base */
     #vaultModal {
-      background: rgba(2, 6, 23, 0.78);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
     }
   </style>
 </head>
@@ -432,7 +521,7 @@
             <span class="px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-xs text-emerald-400 font-bold tracking-wider uppercase inline-block shadow-lg font-mono">
               ✓ SYSTEM DEPLOYMENT SUCCESSFUL
             </span>
-            <h1 class="text-4xl md:text-7xl font-extrabold text-white neon-glow-text tracking-tight">
+            <h1 class="text-4xl md:text-7xl font-extrabold text-white neon-glow-text tracking-tight font-display">
               HAPPY BIRTHDAY,<br/>
               <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">SRITHIKA</span>😂💗
             </h1>
@@ -636,7 +725,7 @@
             </div>
           </div>
 
-          <!-- 🖼️ CATEGORY 2: PHOTO GALLERY (EXACT 8 PHOTOS WITH FALLBACKS) -->
+          <!-- 🖼️ CATEGORY 2: PHOTO GALLERY -->
           <div id="sec-photos" class="hidden space-y-3">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div onclick="focusImage('assets/images/img1.jpeg')" class="rich-photo-card p-2">
@@ -647,15 +736,15 @@
                 <img src="assets/images/img2.jpeg" class="rounded-lg w-full h-32 object-cover" alt="Memory 2" onerror="this.onerror=null; this.src='assets/images/img2.jpg';" />
                 <div class="p-2 text-center text-xs font-bold text-slate-300 font-mono">🔍 Tap to Focus</div>
               </div>
-	     <div onclick="focusImage('assets/images/img10.jpeg')" class="rich-photo-card p-2">
+              <div onclick="focusImage('assets/images/img10.jpeg')" class="rich-photo-card p-2">
                 <img src="assets/images/img10.jpeg" class="rounded-lg w-full h-32 object-cover" alt="Memory 10" onerror="this.onerror=null; this.src='assets/images/img10.jpg';" />
                 <div class="p-2 text-center text-xs font-bold text-slate-300 font-mono">🔍 Tap to Focus</div>
               </div>
-	     <div onclick="focusImage('assets/images/img7.jpeg')" class="rich-photo-card p-2">
+              <div onclick="focusImage('assets/images/img7.jpeg')" class="rich-photo-card p-2">
                 <img src="assets/images/img7.jpeg" class="rounded-lg w-full h-32 object-cover" alt="Memory 7" onerror="this.onerror=null; this.src='assets/images/img7.jpg';" />
                 <div class="p-2 text-center text-xs font-bold text-slate-300 font-mono">🔍 Tap to Focus</div>
               </div>
-	     <div onclick="focusImage('assets/images/img8.jpeg')" class="rich-photo-card p-2">
+              <div onclick="focusImage('assets/images/img8.jpeg')" class="rich-photo-card p-2">
                 <img src="assets/images/img8.jpeg" class="rounded-lg w-full h-32 object-cover" alt="Memory 8" onerror="this.onerror=null; this.src='assets/images/img8.jpg';" />
                 <div class="p-2 text-center text-xs font-bold text-slate-300 font-mono">🔍 Tap to Focus</div>
               </div>
@@ -860,7 +949,8 @@
 
       document.querySelectorAll('.spidey-floater').forEach((spidey, idx) => {
         const offset = (idx + 1) * 8;
-        spidey.style.transform = `translate(${mouseX * offset}px, ${mouseY * offset}px)`;
+        spidey.style.marginLeft = `${mouseX * offset}px`;
+        spidey.style.marginTop = `${mouseY * offset}px`;
       });
     };
 
@@ -946,9 +1036,7 @@
     }
     animateModalParticles();
 
-    // =========================================================
     // DEDICATED WIREFRAME (NON-COLOR FILLED) FLOATING HEARTS ENGINE
-    // =========================================================
     const hCanvas = document.getElementById('heartCanvas');
     const hCtx = hCanvas.getContext('2d');
     let hParticles = [];
@@ -965,7 +1053,7 @@
       reset() {
         this.x = Math.random() * hCanvas.width;
         this.y = hCanvas.height + Math.random() * 80;
-        this.size = Math.random() * 14 + 10; // Heart scale
+        this.size = Math.random() * 14 + 10;
         this.speedY = -(Math.random() * 0.9 + 0.3);
         this.speedX = Math.sin(Math.random() * Math.PI * 2) * 0.3;
         this.opacity = Math.random() * 0.6 + 0.25;
@@ -986,12 +1074,10 @@
         hCtx.scale(currentScale, currentScale);
         
         hCtx.beginPath();
-        // Mathematical hollow wireframe heart bezier curve
         hCtx.moveTo(0, -5);
         hCtx.bezierCurveTo(-5, -15, -15, -5, 0, 8);
         hCtx.bezierCurveTo(15, -5, 5, -15, 0, -5);
         
-        // STROKE ONLY (NO COLOR FILL)
         hCtx.strokeStyle = this.color;
         hCtx.lineWidth = 1.6;
         hCtx.globalAlpha = this.opacity;
@@ -1007,7 +1093,7 @@
       hParticles = [];
       for (let i = 0; i < 45; i++) {
         const h = new HollowHeartParticle();
-        h.y = Math.random() * hCanvas.height; // Scatter initially
+        h.y = Math.random() * hCanvas.height;
         hParticles.push(h);
       }
     }
@@ -1096,7 +1182,7 @@
       setTimeout(() => { modal.classList.add('hidden'); }, 200);
     }
 
-    // WINDOW 2 LOGIC: MEDIA VAULT (WITH HOLLOW HEARTS)
+    // WINDOW 2 LOGIC: MEDIA VAULT
     function openVaultModal() {
       playSound(850, 'sine', 0.15);
       const modal = document.getElementById('vaultModal');
@@ -1176,7 +1262,7 @@
   </script>
   
   <script>
-    /* Cursor Glow & Card Interactions */
+    /* Extra UI Interactions */
     const cursorGlow = document.createElement('div');
     cursorGlow.id = 'cursorGlow';
     cursorGlow.style.cssText = `
@@ -1220,19 +1306,129 @@
       });
     });
 
-    const spideys = document.querySelectorAll('.spidey-floater');
-    window.addEventListener('mousemove', (e) => {
-      const nx = (e.clientX / window.innerWidth - .5);
-      const ny = (e.clientY / window.innerHeight - .5);
+    window.addEventListener('resize', resizeHeartCanvas);
+  </script>
 
-      spideys.forEach((spidey, index) => {
-        const strength = 5 + index * 2;
-        spidey.style.marginLeft = `${nx * strength}px`;
-        spidey.style.marginTop = `${ny * strength}px`;
+  <!-- PREMIUM INTERACTION LAYER -->
+  <script>
+  (function () {
+    const supportsHover = window.matchMedia("(hover: hover)").matches;
+    if (supportsHover) {
+      const panels = document.querySelectorAll(
+        "#scene1, #scene2, #wishModalContent, #vaultModalContent"
+      );
+      panels.forEach((panel) => {
+        panel.addEventListener("mousemove", (event) => {
+          const rect = panel.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - 0.5;
+          const y = (event.clientY - rect.top) / rect.height - 0.5;
+          panel.style.transform = `
+            perspective(1400px)
+            rotateX(${(-y * 1.8).toFixed(2)}deg)
+            rotateY(${(x * 1.8).toFixed(2)}deg)
+          `;
+        });
+        panel.addEventListener("mouseleave", () => {
+          panel.style.transform = "";
+        });
+      });
+    }
+
+    const liveIndicator = document.querySelector("header .bg-emerald-500");
+    if (liveIndicator) {
+      setInterval(() => {
+        liveIndicator.style.boxShadow =
+          "0 0 8px rgba(16,185,129,.8), 0 0 25px rgba(16,185,129,.55)";
+        setTimeout(() => {
+          liveIndicator.style.boxShadow = "";
+        }, 500);
+      }, 2200);
+    }
+
+    document.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const rect = button.getBoundingClientRect();
+        const ripple = document.createElement("span");
+        ripple.style.position = "absolute";
+        ripple.style.left = `${event.clientX - rect.left}px`;
+        ripple.style.top = `${event.clientY - rect.top}px`;
+        ripple.style.width = "8px";
+        ripple.style.height = "8px";
+        ripple.style.borderRadius = "50%";
+        ripple.style.pointerEvents = "none";
+        ripple.style.background = "rgba(255,255,255,.6)";
+        ripple.style.transform = "translate(-50%, -50%) scale(1)";
+        ripple.style.boxShadow =
+          "0 0 12px rgba(255,255,255,.8), 0 0 28px rgba(34,211,238,.65)";
+        ripple.style.transition =
+          "transform .7s ease, opacity .7s ease";
+        button.appendChild(ripple);
+        requestAnimationFrame(() => {
+          ripple.style.transform = "translate(-50%, -50%) scale(28)";
+          ripple.style.opacity = "0";
+        });
+        setTimeout(() => ripple.remove(), 750);
       });
     });
 
-    window.addEventListener('resize', resizeHeartCanvas);
+    const sceneTwo = document.getElementById("scene2");
+    if (sceneTwo) {
+      const observer = new MutationObserver(() => {
+        if (!sceneTwo.classList.contains("hidden")) {
+          const cards = sceneTwo.querySelectorAll(".grid > div");
+          cards.forEach((card, index) => {
+            card.animate(
+              [
+                {
+                  opacity: 0,
+                  transform: "translateY(25px) scale(.94) rotateX(8deg)"
+                },
+                {
+                  opacity: 1,
+                  transform: "translateY(0) scale(1) rotateX(0deg)"
+                }
+              ],
+              {
+                duration: 850,
+                delay: index * 110,
+                easing: "cubic-bezier(.2,.8,.2,1)",
+                fill: "both"
+              }
+            );
+          });
+          observer.disconnect();
+        }
+      });
+      observer.observe(sceneTwo, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (typeof closeWishModal === "function") closeWishModal();
+        if (typeof closeVaultModal === "function") closeVaultModal();
+        if (typeof closeMediaFocus === "function") closeMediaFocus();
+      }
+    });
+
+    const terminal = document.querySelector("#scene1 .bg-slate-950\\/90");
+    if (terminal) {
+      terminal.animate(
+        [
+          { boxShadow: "inset 0 0 0 rgba(34,211,238,0)" },
+          { boxShadow: "inset 0 0 35px rgba(34,211,238,.06)" },
+          { boxShadow: "inset 0 0 0 rgba(34,211,238,0)" }
+        ],
+        {
+          duration: 4200,
+          iterations: Infinity,
+          easing: "ease-in-out"
+        }
+      );
+    }
+  })();
   </script>
 </body>
 </html>
